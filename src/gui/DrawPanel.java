@@ -88,7 +88,12 @@ public class DrawPanel extends javax.swing.JPanel {
             tr = de.getTr();
             tr.toWorld(p, w);
             de.setX0(w.x, w.y);
-            de.rk4();
+            
+            if(de.isPeriodic())
+              de.poincareMap();
+            else
+              de.rk4();
+            
             repaint();
         } else if(ds instanceof MapDS2D) {
             MapDS2D map = (MapDS2D)ds;

@@ -22,7 +22,7 @@ public abstract class DiffEq extends DynSys {
     /**
      * Number of iterations
      */
-    protected int iterCount = 9000;
+    protected int iterCount = 500;
     /**
      * Step of the time t
      */
@@ -31,7 +31,29 @@ public abstract class DiffEq extends DynSys {
      * Starting point of the trace which can be continued
      */
     protected double[] x0;
+    
+    
+    protected boolean periodicB;
 
+    public boolean isPeriodic() {
+        return periodicB;
+    }
+    /**
+     * Minimal period of the ODE
+     */
+    private double period;
+
+    public double getPeriod() {
+        return period;
+    }
+
+    protected void setPeriod(double period) {
+        if(periodicB)
+          this.period = period;
+        else
+          System.err.println("The system isn't periodic, can't set the period.");
+    }
+    
     public double[] getX0() {
         return x0;
     }
@@ -84,8 +106,6 @@ public abstract class DiffEq extends DynSys {
      */
     public void rk4() {
         final int n = x0.length;
-        //double[][] x = new double[iterCount][n]; 
-        //x[0] = Arrays.copyOf(x0, n);
         
         double[][] k = new double[n][4];
         double[] args = new double[n];
@@ -105,7 +125,7 @@ public abstract class DiffEq extends DynSys {
         //temporary array
         double[] tmp = new double[n];
         
-        for(int i = 0; i < iterCount-1; i++) {
+        for(int i = 1; i <= iterCount; i++) {
             t = i * step;
             tHalf = t + step/2;
             
@@ -142,12 +162,28 @@ public abstract class DiffEq extends DynSys {
                 pointNext[j] = pointCur[j] + koef *(k[j][0] + 2*k[j][1] + 2*k[j][2] + k[j][3]);
             }
             
-            trace.add(pointNext);
+            if(!isPeriodic() || i == iterCount) {
+              trace.add(pointNext);
+            }
             pointCur = pointNext;
         }
         
         //add last point of trace for possibility of continuing the trace
+        for(int j = 0; j < n; j++)
+            tmp[j] = pointCur[j];
         setX0(tmp);
+        
         traces.add(trace);
+    }
+    
+    public void poincareMap() {
+        if(periodicB && period > 0.0) {
+            step = period / iterCount;
+            
+            for(int i = 0; i < 500; i++)
+                this.rk4();
+        }
+        else
+          System.err.println("Can't call the PoincareMap: period = " + period);
     }
 }

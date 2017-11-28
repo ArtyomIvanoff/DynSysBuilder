@@ -21,6 +21,12 @@ public class DuffingEq extends DiffEq2D {
         this.a = a;
         this.b = b;
         
+        //if the system is periodic with period 2PI / b
+        if(a != 0 && b != 0) {
+            periodicB = true;
+            setPeriod((2*Math.PI)/b);
+        }
+        
         rps = new RightPart[] {
             (t, x) -> { return x[1]; },
             (t, x) -> { return -c1*x[0] - c2*Math.pow(x[0], 3) + a*Math.sin(b*t);}

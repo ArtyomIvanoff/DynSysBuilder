@@ -162,7 +162,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="jTFiters">
           <Properties>
-            <Property name="text" type="java.lang.String" value="9000"/>
+            <Property name="text" type="java.lang.String" value="500"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTFitersActionPerformed"/>

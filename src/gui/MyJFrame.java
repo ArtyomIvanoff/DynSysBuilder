@@ -161,7 +161,7 @@ public class MyJFrame extends javax.swing.JFrame {
 
         jLabel2.setText("Step");
 
-        jTFiters.setText("9000");
+        jTFiters.setText("500");
         jTFiters.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTFitersActionPerformed(evt);
@@ -620,7 +620,12 @@ public class MyJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(ds instanceof DiffEq2D) {
           DiffEq2D de2 = (DiffEq2D)ds;
-          de2.rk4();
+          
+          if(de2.isPeriodic())
+            de2.poincareMap();
+          else
+            de2.rk4();
+          
           drawPanel.repaint();
         } else if(ds instanceof MapDS2D) {
             MapDS2D map = (MapDS2D)ds;
@@ -825,7 +830,7 @@ public class MyJFrame extends javax.swing.JFrame {
         jTFcentX.setText("0");
         jTFcentY.setText("0");
         jTFdist.setText("2");
-        jTFiters.setText("9000");
+        jTFiters.setText("500");
         jTFstep.setText("0.01");
         
         drawPanel.repaint();
