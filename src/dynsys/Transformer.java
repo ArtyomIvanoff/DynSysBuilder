@@ -87,11 +87,16 @@ import java.awt.geom.Point2D;
             return yCent;
         }
         
-        public Transformer() {
-            xCent = yCent = 0;
-            dist = 2;
+        public Transformer(double xC, double yC, double d) {
+            xCent = xC;
+            yCent = yC;
+            dist = d;
             
             setEdges(xCent, yCent, dist);
+        }
+        
+        public Transformer() {
+            this(0, 0, 2);
         }
 
         public void toScreen(Point2D.Double S, Point2D.Double W) {

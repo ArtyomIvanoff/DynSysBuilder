@@ -16,28 +16,15 @@ import java.util.HashSet;
  * @author 122
  */
 public class MapDS2D extends MapDS {
-    /**
-     * Canvas which holds phase portrait of the system
-     */
-    protected BufferedImage canvas = new BufferedImage(DrawPanel.WIDTH_P, DrawPanel.HEIGHT_P, BufferedImage.TYPE_INT_ARGB);
-    Transformer tr = new Transformer();
+    public MapDS2D() {
+        tr = new Transformer();
+        mim = new MapImageManager(tr);
+    }
+    
+    private Transformer tr;
     
      public Transformer getTr() {
         return tr;
-    }
-    
-     /**
-      * It fills the canvas with color col
-      * @param col 
-      */
-    protected void fillCanvas(Color col) {
-        int c = col.getRGB();
-        
-        for (int x = 0; x < canvas.getWidth(); x++) {
-            for (int y = 0; y < canvas.getHeight(); y++) {
-                canvas.setRGB(x, y, c);
-            }
-        }
     }
     
     /**
@@ -47,36 +34,48 @@ public class MapDS2D extends MapDS {
      */
     @Override
     public BufferedImage getImage() {
-        int black = Color.BLACK.getRGB();
+        return mim.updateImage();
+    }
+    
+    private class MapImageManager extends ImageManager {
         
-        fillCanvas(Color.white);
+        public MapImageManager(Transformer tr) {
+            super(tr);
+            c = Color.BLACK;
+        }
+
+        @Override
+        BufferedImage updateImage() {
+          int colorRGB = c.getRGB();
         
-        Point2D.Double ScreenP = new Point2D.Double();
-        Point2D.Double WorldP = new Point2D.Double();
+          fillCanvas(Color.white);
         
-        for(HashSet<Double[]> cascade : cascades) {
+          Point2D.Double ScreenP = new Point2D.Double();
+          Point2D.Double WorldP = new Point2D.Double();
+        
+          for(HashSet<Double[]> cascade : cascades) {
             for(Double[] point : cascade) {
                 WorldP.setLocation(point[0], point[1]);
                 tr.toScreen(ScreenP, WorldP);
                 try {
                     if(tr.isInner(WorldP))
-                      canvas.setRGB((int)ScreenP.x, (int)ScreenP.y, black);
+                      canvas.setRGB((int)ScreenP.x, (int)ScreenP.y, colorRGB);
                 } catch(Exception e) {
                     System.err.println(ScreenP + " and " + WorldP);
                     System.err.println(e);
                 }
             }
+          }
+        
+          return canvas;
         }
         
-        return canvas;
+        private Color c;
+
+        public void setC(Color c) {
+            this.c = c;
+        }
     }
     
-    /**
-     * Clear canvas and
-     * reset the cascades of points
-     */
-    public void clearImage() {
-        fillCanvas(Color.white);
-        cascades.clear();
-    }
+    private MapImageManager mim;
 }
