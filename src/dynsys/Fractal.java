@@ -10,13 +10,14 @@ package dynsys;
  * @author 122
  */
 public abstract class Fractal extends DynSys {
-    private int iterations;
+    protected int iterations;
 
     public int getIterations() {
         return iterations;
     }
 
     public void setIterations(int iterations) {
-        this.iterations = iterations;
+        if(iterations >= 0)
+            this.iterations = iterations;
     }
 }

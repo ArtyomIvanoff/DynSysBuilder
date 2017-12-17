@@ -11,6 +11,9 @@ import dynsys.DiffEq2D;
 import dynsys.DuffingEq;
 import dynsys.DynSys;
 import dynsys.DynSys.Area;
+import dynsys.FractalRandIFS;
+import dynsys.IFS;
+import dynsys.IFS.CommonIFS;
 import dynsys.MapDS;
 import dynsys.MapDS2D;
 import javax.swing.JOptionPane;
@@ -23,7 +26,9 @@ public class MyJFrame extends javax.swing.JFrame {
     DynSys ds;
     
     String[] maps = {"Chirikov"}; 
-    String[] des = {"DuffingEq"}; 
+    String[] des = {"DuffingEq"};
+    String[] fractals = {"IFS (rand)"};
+    
     /**
      * Creates new form MyJFrame
      */
@@ -78,6 +83,10 @@ public class MyJFrame extends javax.swing.JFrame {
         jTFc2_Duf = new javax.swing.JTextField();
         jTFa_Duf = new javax.swing.JTextField();
         jTFb_Duf = new javax.swing.JTextField();
+        frameIFSrand = new javax.swing.JFrame();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listIFS = new javax.swing.JList();
+        jButton4 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         drawPanel = new DrawPanel();
         panelArea = new javax.swing.JPanel();
@@ -422,6 +431,49 @@ public class MyJFrame extends javax.swing.JFrame {
                 .addContainerGap(65, Short.MAX_VALUE))
         );
 
+        frameIFSrand.setTitle("IFS (rand. alg.)");
+        frameIFSrand.setPreferredSize(new java.awt.Dimension(260, 200));
+        frameIFSrand.setResizable(false);
+        frameIFSrand.setSize(new java.awt.Dimension(260, 200));
+
+        jScrollPane2.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+
+        listIFS.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        listIFS.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        CommonIFS[] cifsArr = {CommonIFS.SierpinskiTriangle, 
+            CommonIFS.SierpinskiCarpet, CommonIFS.Fern, CommonIFS.Crystal};
+        listIFS.setListData(cifsArr);
+
+        jScrollPane2.setViewportView(listIFS);
+
+        jButton4.setText("OK");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout frameIFSrandLayout = new javax.swing.GroupLayout(frameIFSrand.getContentPane());
+        frameIFSrand.getContentPane().setLayout(frameIFSrandLayout);
+        frameIFSrandLayout.setHorizontalGroup(
+            frameIFSrandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(frameIFSrandLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton4)
+                .addContainerGap(98, Short.MAX_VALUE))
+        );
+        frameIFSrandLayout.setVerticalGroup(
+            frameIFSrandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(frameIFSrandLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(frameIFSrandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton4)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(50, 50, 50))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SysBuilder");
         setResizable(false);
@@ -455,7 +507,7 @@ public class MyJFrame extends javax.swing.JFrame {
 
         jTFdist.setText("2");
 
-        butTraec.setText("Continue traec");
+        butTraec.setText("Next Iteration");
         butTraec.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 butTraecActionPerformed(evt);
@@ -631,6 +683,12 @@ public class MyJFrame extends javax.swing.JFrame {
             MapDS2D map = (MapDS2D)ds;
             map.getSequence();
             drawPanel.repaint();
+        } else if(ds instanceof  FractalRandIFS) {
+            FractalRandIFS fr = (FractalRandIFS)ds;
+            
+            fr.applyIFS();
+            
+            drawPanel.repaint();
         }
     }//GEN-LAST:event_butTraecActionPerformed
 
@@ -731,6 +789,10 @@ public class MyJFrame extends javax.swing.JFrame {
                 case "DuffingEq" :
                     frameDuffing.setVisible(true);
                     frameDuffing.repaint();
+                case "IFS (rand)" :
+                    frameIFSrand.setVisible(true);
+                    frameIFSrand.repaint();
+                    
             }
         } catch(Exception e) {
             System.err.println(e);
@@ -782,6 +844,9 @@ public class MyJFrame extends javax.swing.JFrame {
         else if(ds instanceof DuffingEq) {
             frameDuffing.setVisible(true);
             frameDuffing.getContentPane().repaint();
+        } else if(ds instanceof FractalRandIFS) {
+            frameIFSrand.setVisible(true);
+            frameIFSrand.getContentPane().repaint();
         }
     }//GEN-LAST:event_menuParamsActionPerformed
 
@@ -843,6 +908,9 @@ public class MyJFrame extends javax.swing.JFrame {
             case "Map" :
                 sampleList.setListData(maps);
                 break;
+            case "Fractal" :
+                sampleList.setListData(fractals);
+                break;
             case "ODE" :
             default :
                 sampleList.setListData(des);
@@ -863,6 +931,17 @@ public class MyJFrame extends javax.swing.JFrame {
     private void jTFitersSeqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFitersSeqActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTFitersSeqActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        CommonIFS choiceIFS = (CommonIFS)listIFS.getSelectedValue();
+        
+        ds = new FractalRandIFS(IFS.getInstance(choiceIFS));
+        ((DrawPanel)drawPanel).setDs(ds);
+        
+        frameIFSrand.setVisible(false);
+        drawPanel.repaint();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -906,12 +985,14 @@ public class MyJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel drawPanel;
     private javax.swing.JFrame frameChirikov;
     private javax.swing.JFrame frameDuffing;
+    private javax.swing.JFrame frameIFSrand;
     private javax.swing.JFrame frameRK4;
     private javax.swing.JFrame frameSeq;
     private javax.swing.JFrame frameSys;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabCent;
     private javax.swing.JLabel jLabDist;
@@ -931,6 +1012,7 @@ public class MyJFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextField jTFa;
@@ -946,6 +1028,7 @@ public class MyJFrame extends javax.swing.JFrame {
     private javax.swing.JTextField jTFstep;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTextPane jTextPane2;
+    private javax.swing.JList listIFS;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenuItem menuParams;
     private javax.swing.JMenuItem menuProps;

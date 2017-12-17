@@ -5,7 +5,6 @@
  */
 package gui;
 
-import dynsys.Chirikov;
 import dynsys.DynSys;
 import dynsys.DiffEq2D;
 import dynsys.DuffingEq;
@@ -102,7 +101,7 @@ public class DrawPanel extends javax.swing.JPanel {
             map.setX0(w.x, w.y);
             map.getSequence();
             repaint();
-        }  
+        }   
     }//GEN-LAST:event_formMouseClicked
     
     @Override

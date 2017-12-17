@@ -5,6 +5,7 @@
  */
 package dynsys;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 /**
@@ -14,6 +15,7 @@ import java.util.HashSet;
  * @author 122
  */
 public abstract class DiffEq extends DynSys {
+    
     /**
      * Hold all current traces
      */
@@ -105,6 +107,9 @@ public abstract class DiffEq extends DynSys {
      * a world coordinate system
      */
     public void rk4() {
+        if(x0 == null)
+            return;
+        
         final int n = x0.length;
         
         double[][] k = new double[n][4];

@@ -53,6 +53,9 @@ public abstract class MapDS extends DynSys {
      * @return an array op points if it's needed
      */
     public double[][] getSequence() {
+        if(x0 == null)
+           return null;
+        
         final int n = x0.length;
         double[][] x = new double[iterCount][n];
         x[0] = Arrays.copyOf(x0, n);
