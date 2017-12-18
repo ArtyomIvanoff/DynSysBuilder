@@ -16,6 +16,10 @@ import dynsys.IFS;
 import dynsys.IFS.CommonIFS;
 import dynsys.MapDS;
 import dynsys.MapDS2D;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
@@ -23,22 +27,23 @@ import javax.swing.JOptionPane;
  * @author 122
  */
 public class MyJFrame extends javax.swing.JFrame {
+
     DynSys ds;
-    
-    String[] maps = {"Chirikov"}; 
+
+    String[] maps = {"Chirikov"};
     String[] des = {"DuffingEq"};
     String[] fractals = {"IFS (rand)"};
-    
+
     /**
      * Creates new form MyJFrame
      */
     public MyJFrame() {
         initComponents();
-        ds = ((DrawPanel)drawPanel).getDs();
-       
+        ds = ((DrawPanel) drawPanel).getDs();
+
         drawPanel.repaint();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -432,7 +437,6 @@ public class MyJFrame extends javax.swing.JFrame {
         );
 
         frameIFSrand.setTitle("IFS (rand. alg.)");
-        frameIFSrand.setPreferredSize(new java.awt.Dimension(260, 200));
         frameIFSrand.setResizable(false);
         frameIFSrand.setSize(new java.awt.Dimension(260, 200));
 
@@ -588,6 +592,11 @@ public class MyJFrame extends javax.swing.JFrame {
         menuFile.setText("File");
 
         jMenuItem1.setText("Save as");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         menuFile.add(jMenuItem1);
 
         jMenuItem2.setText("Exit");
@@ -660,7 +669,7 @@ public class MyJFrame extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "This program was created by Ivanov Artyom.", "About program",  JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "This program was created by Ivanov Artyom.", "About program", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -670,24 +679,25 @@ public class MyJFrame extends javax.swing.JFrame {
 
     private void butTraecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butTraecActionPerformed
         // TODO add your handling code here:
-        if(ds instanceof DiffEq2D) {
-          DiffEq2D de2 = (DiffEq2D)ds;
-          
-          if(de2.isPeriodic())
-            de2.poincareMap();
-          else
-            de2.rk4();
-          
-          drawPanel.repaint();
-        } else if(ds instanceof MapDS2D) {
-            MapDS2D map = (MapDS2D)ds;
+        if (ds instanceof DiffEq2D) {
+            DiffEq2D de2 = (DiffEq2D) ds;
+
+            if (de2.isPeriodic()) {
+                de2.poincareMap();
+            } else {
+                de2.rk4();
+            }
+
+            drawPanel.repaint();
+        } else if (ds instanceof MapDS2D) {
+            MapDS2D map = (MapDS2D) ds;
             map.getSequence();
             drawPanel.repaint();
-        } else if(ds instanceof  FractalRandIFS) {
-            FractalRandIFS fr = (FractalRandIFS)ds;
-            
+        } else if (ds instanceof FractalRandIFS) {
+            FractalRandIFS fr = (FractalRandIFS) ds;
+
             fr.applyIFS();
-            
+
             drawPanel.repaint();
         }
     }//GEN-LAST:event_butTraecActionPerformed
@@ -700,76 +710,75 @@ public class MyJFrame extends javax.swing.JFrame {
 
     private void butMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butMoveActionPerformed
         // TODO add your handling code here:
-         if(ds instanceof DiffEq2D) {
-            DiffEq2D de2 = (DiffEq2D)ds;
-            
+        if (ds instanceof DiffEq2D) {
+            DiffEq2D de2 = (DiffEq2D) ds;
+
             //if it fails to set new values, it uses the old ones
             double newX = de2.getTr().getxCent();
             double newY = de2.getTr().getyCent();
             double newD = de2.getTr().getDist();
-            
-            try{
+
+            try {
                 newX = Double.parseDouble(jTFcentX.getText().trim());
                 newY = Double.parseDouble(jTFcentY.getText().trim());
                 newD = Double.parseDouble(jTFdist.getText().trim());
-            } catch(Exception e) {
+            } catch (Exception e) {
                 System.err.println(e);
             }
-            
+
             de2.getTr().setEdges(newX, newY, newD);
-            
+
             drawPanel.repaint();
-        } else if(ds instanceof MapDS2D) {
-            MapDS2D de2 = (MapDS2D)ds;
-            
+        } else if (ds instanceof MapDS2D) {
+            MapDS2D de2 = (MapDS2D) ds;
+
             //if it fails to set new values, it uses the old ones
             double newX = de2.getTr().getxCent();
             double newY = de2.getTr().getyCent();
             double newD = de2.getTr().getDist();
-            
-            try{
+
+            try {
                 newX = Double.parseDouble(jTFcentX.getText().trim());
                 newY = Double.parseDouble(jTFcentY.getText().trim());
                 newD = Double.parseDouble(jTFdist.getText().trim());
-            } catch(Exception e) {
+            } catch (Exception e) {
                 System.err.println(e);
             }
-            
+
             de2.getTr().setEdges(newX, newY, newD);
-            
+
             drawPanel.repaint();
-        } 
+        }
     }//GEN-LAST:event_butMoveActionPerformed
 
     private void buSetRK4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buSetRK4ActionPerformed
         // TODO add your handling code here:
-        if(ds instanceof DiffEq) {
-            DiffEq de = (DiffEq)ds;
-            
+        if (ds instanceof DiffEq) {
+            DiffEq de = (DiffEq) ds;
+
             int newIter = de.getIterCount();
             double newSt = de.getStep();
-            
-            try{
+
+            try {
                 newIter = Integer.parseInt(jTFiters.getText().trim());
                 newSt = Double.parseDouble(jTFstep.getText().trim());
-            }catch(Exception e) {
+            } catch (Exception e) {
                 System.err.println(e);
             }
-            
+
             de.setIterCount(newIter);
             de.setStep(newSt);
-            
+
             frameRK4.setVisible(false);
         }
     }//GEN-LAST:event_buSetRK4ActionPerformed
 
     private void menuPropsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPropsActionPerformed
         // TODO add your handling code here:
-        if(ds instanceof DiffEq){
+        if (ds instanceof DiffEq) {
             frameRK4.setVisible(true);
             frameRK4.getContentPane().repaint();
-        }
-        else if(ds instanceof MapDS) {
+        } else if (ds instanceof MapDS) {
             frameSeq.setVisible(true);
             frameSeq.getContentPane().repaint();
         }
@@ -778,54 +787,54 @@ public class MyJFrame extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         frameSys.setVisible(false);
-        
-        try{
-            String choice = (String)sampleList.getSelectedValue();
-            switch(choice){
-                case "Chirikov" :
+
+        try {
+            String choice = (String) sampleList.getSelectedValue();
+            switch (choice) {
+                case "Chirikov":
                     frameChirikov.setVisible(true);
                     frameChirikov.repaint();
                     break;
-                case "DuffingEq" :
+                case "DuffingEq":
                     frameDuffing.setVisible(true);
                     frameDuffing.repaint();
-                case "IFS (rand)" :
+                case "IFS (rand)":
                     frameIFSrand.setVisible(true);
                     frameIFSrand.repaint();
-                    
+
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println(e);
-        }   
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         // default value
         double a = 0.7;
-        
+
         try {
             a = Double.parseDouble(jTFa.getText().trim());
         } catch (Exception e) {
             System.err.println(e);
         }
-        
+
         Area ar;
-        switch(comboBoxArea.getSelectedIndex()) {
-            case 0 :
-              ar = Area.R2;
-              break;
-            case 1 :
-              ar = Area.CYLINDER;
-              break;
-            case 2 :
-            default: 
-              ar = Area.TORUS;
+        switch (comboBoxArea.getSelectedIndex()) {
+            case 0:
+                ar = Area.R2;
+                break;
+            case 1:
+                ar = Area.CYLINDER;
+                break;
+            case 2:
+            default:
+                ar = Area.TORUS;
         }
-        
+
         ds = new Chirikov(a, ar);
-        ((DrawPanel)drawPanel).setDs(ds);
-        
+        ((DrawPanel) drawPanel).setDs(ds);
+
         frameChirikov.setVisible(false);
         //set default values in the text fileds
         jTFcentX.setText("0");
@@ -837,14 +846,13 @@ public class MyJFrame extends javax.swing.JFrame {
 
     private void menuParamsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuParamsActionPerformed
         // TODO add your handling code here:
-        if(ds instanceof Chirikov) {
+        if (ds instanceof Chirikov) {
             frameChirikov.setVisible(true);
             frameChirikov.getContentPane().repaint();
-        }
-        else if(ds instanceof DuffingEq) {
+        } else if (ds instanceof DuffingEq) {
             frameDuffing.setVisible(true);
             frameDuffing.getContentPane().repaint();
-        } else if(ds instanceof FractalRandIFS) {
+        } else if (ds instanceof FractalRandIFS) {
             frameIFSrand.setVisible(true);
             frameIFSrand.getContentPane().repaint();
         }
@@ -852,26 +860,26 @@ public class MyJFrame extends javax.swing.JFrame {
 
     private void butSetSeqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butSetSeqActionPerformed
         // TODO add your handling code here:
-        if(ds instanceof MapDS) {
-            MapDS map = (MapDS)ds;
-            
+        if (ds instanceof MapDS) {
+            MapDS map = (MapDS) ds;
+
             int newIter = map.getIterCount();
-            
-            try{
+
+            try {
                 newIter = Integer.parseInt(jTFitersSeq.getText().trim());
-            }catch(Exception e) {
+            } catch (Exception e) {
                 System.err.println(e);
             }
-            
+
             map.setIterCount(newIter);
-            
+
             frameSeq.setVisible(false);
         }
     }//GEN-LAST:event_butSetSeqActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        
+
         //if it fails to set new params, use default
         double c1 = 1;
         double c2 = -1;
@@ -888,39 +896,39 @@ public class MyJFrame extends javax.swing.JFrame {
         }
 
         ds = new DuffingEq(c1, c2, a, b);
-        frameDuffing.setVisible(false);  
-        
-        ((DrawPanel)drawPanel).setDs(ds);
+        frameDuffing.setVisible(false);
+
+        ((DrawPanel) drawPanel).setDs(ds);
         //set default values in the text fileds
         jTFcentX.setText("0");
         jTFcentY.setText("0");
         jTFdist.setText("2");
         jTFiters.setText("500");
         jTFstep.setText("0.01");
-        
+
         drawPanel.repaint();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-        String choice = (String)jComboBox1.getSelectedItem();
-        switch(choice) {
-            case "Map" :
+        String choice = (String) jComboBox1.getSelectedItem();
+        switch (choice) {
+            case "Map":
                 sampleList.setListData(maps);
                 break;
-            case "Fractal" :
+            case "Fractal":
                 sampleList.setListData(fractals);
                 break;
-            case "ODE" :
-            default :
+            case "ODE":
+            default:
                 sampleList.setListData(des);
         }
-        
+
         //set default values
         jTFcentX.setText("0");
         jTFcentY.setText("0");
         jTFdist.setText("2");
-        
+
         frameSys.getContentPane().repaint();
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
@@ -934,14 +942,33 @@ public class MyJFrame extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        CommonIFS choiceIFS = (CommonIFS)listIFS.getSelectedValue();
-        
+        CommonIFS choiceIFS = (CommonIFS) listIFS.getSelectedValue();
+
         ds = new FractalRandIFS(IFS.getInstance(choiceIFS));
-        ((DrawPanel)drawPanel).setDs(ds);
-        
+        ((DrawPanel) drawPanel).setDs(ds);
+
         frameIFSrand.setVisible(false);
         drawPanel.repaint();
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        String format = "png";
+        File saveFile = new File(ds.toString() + "." + format);
+        JFileChooser chooser = new JFileChooser();
+        chooser.setSelectedFile(saveFile);
+        
+        int rval = chooser.showSaveDialog(jMenuItem1);
+        if (rval == JFileChooser.APPROVE_OPTION) {
+            saveFile = chooser.getSelectedFile();
+
+            try {
+                ImageIO.write(ds.getImage(), format, saveFile);
+            } catch (IOException ex) {
+                System.err.println("Exception while the image was  being saved: " + ex);
+            }
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
