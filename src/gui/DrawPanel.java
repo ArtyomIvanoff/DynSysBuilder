@@ -24,16 +24,7 @@ public class DrawPanel extends javax.swing.JPanel {
     public static final int WIDTH_P = 500;
     
     private DynSys ds;
-    private Transformer tr;
-
-    public Transformer getTr() {
-        return tr;
-    }
-
-    public void setTr(Transformer tr) {
-        this.tr = tr;
-    }
-
+    
     public DynSys getDs() {
         return ds;
     }
@@ -84,7 +75,7 @@ public class DrawPanel extends javax.swing.JPanel {
         
         if(ds instanceof DiffEq2D) {
             DiffEq2D de = (DiffEq2D)ds;
-            tr = de.getTr();
+            Transformer tr = de.getTr();
             tr.toWorld(p, w);
             de.setX0(w.x, w.y);
             
@@ -96,7 +87,7 @@ public class DrawPanel extends javax.swing.JPanel {
             repaint();
         } else if(ds instanceof MapDS2D) {
             MapDS2D map = (MapDS2D)ds;
-            tr = map.getTr();
+            Transformer tr = map.getTr();
             tr.toWorld(p, w);
             map.setX0(w.x, w.y);
             map.getSequence();

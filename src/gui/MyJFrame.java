@@ -798,6 +798,7 @@ public class MyJFrame extends javax.swing.JFrame {
                 case "DuffingEq":
                     frameDuffing.setVisible(true);
                     frameDuffing.repaint();
+                    break;
                 case "IFS (rand)":
                     frameIFSrand.setVisible(true);
                     frameIFSrand.repaint();

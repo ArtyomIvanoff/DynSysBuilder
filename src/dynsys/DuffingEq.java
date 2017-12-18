@@ -47,6 +47,6 @@ public class DuffingEq extends DiffEq2D {
     
     @Override
     public String toString(){
-        return "Duffing";
+        return "Duffing_" + c1 + "_" + c2 + "_" + a + "_" + b;
     }
 }

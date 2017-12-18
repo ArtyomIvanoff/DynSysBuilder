@@ -56,6 +56,6 @@ public class Chirikov extends MapDS2D {
     
     @Override
     public String toString(){
-        return "Chirikov";
+        return "Chirikov_" + a;
     }
 }
