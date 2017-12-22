@@ -3,10 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/DynSysBuilder/src/dynsys/Chirikov.java</file>
+            <file>file:/D:/DynSysBuilder/src/dynsys/DuffingEq.java</file>
             <file>file:/D:/DynSysBuilder/src/gui/DrawPanel.java</file>
             <file>file:/D:/DynSysBuilder/src/dynsys/FractalRandIFS.java</file>
             <file>file:/D:/DynSysBuilder/src/dynsys/Fractal.java</file>
             <file>file:/D:/DynSysBuilder/src/dynsys/IFS.java</file>
+            <file>file:/D:/DynSysBuilder/src/dynsys/DiffEq2D.java</file>
             <file>file:/D:/DynSysBuilder/src/dynsys/DiffEq.java</file>
             <file>file:/D:/DynSysBuilder/src/dynsys/Transformer.java</file>
             <file>file:/D:/DynSysBuilder/src/dynsys/MapDS.java</file>

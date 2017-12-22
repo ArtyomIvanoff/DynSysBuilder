@@ -78,10 +78,10 @@ public abstract class MapDS extends DynSys {
             pointNext = new Double[n];
             for (int j = 0; j < n; j++) {
                 pointNext[j] = rps[j].f(0, tmp);
-                pointCur[j] = pointNext[j];
             }
 
-            cascade.add(pointCur);
+            cascade.add(pointNext);
+            pointCur = pointNext;
         }
 
         //add last inner point for possibility of continuening the trace
